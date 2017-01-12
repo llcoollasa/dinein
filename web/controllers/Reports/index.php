@@ -10,16 +10,24 @@ require_once __DIR__.'/../../../src/app.php';
 
 use Symfony\Component\Validator\Constraints as Assert;
 
-$app->match('/Reports/CustomerByDeliveryLocation', function () use ($app) {
+$app->match('/Reports/CustomerByDeliveryLocation', function (Symfony\Component\HttpFoundation\Request $request) use ($app) {
+
+    $vars = $request->query->all();
+    $city = $vars["city"];
+    $where ='';
 
     $table_columns = array(
         'Customers',
         'Address',
-
     );
+
+    if(!empty($city)){
+        $where = " WHERE Customer_Delivery_address LIKE '%{$city}%' ";
+    }
 
     $find_sql="SELECT count(Customer_Name) as 'Customers', Customer_Delivery_address as 'Address'
                 FROM Customer
+                $where
                 GROUP BY Customer_Delivery_address
                 ORDER BY Customers DESC";
 
