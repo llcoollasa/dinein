@@ -10,8 +10,21 @@
  * file that was distributed with this source code.
  */
 
+
 require_once __DIR__.'/../../vendor/autoload.php';
 require_once __DIR__.'/../../src/app.php';
+
+
+require_once __DIR__.'/Customer/index.php';
+require_once __DIR__.'/Customer_Feedback/index.php';
+require_once __DIR__.'/Menu_Item_Inventory/index.php';
+require_once __DIR__.'/Purchase_Order/index.php';
+require_once __DIR__.'/Purchase_Order_Payment/index.php';
+require_once __DIR__.'/Raw_Material_Inventory/index.php';
+require_once __DIR__.'/Void/index.php';
+require_once __DIR__.'/Void/index.php';
+require_once __DIR__.'/Reports/index.php';
+
 
 
 $app->match('/', function () use ($app) {
