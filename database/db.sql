@@ -1,17 +1,11 @@
 /* 
 DRIVER 		: MYSQL 
-DATABASE 	: RMS
+DATABASE 	: dinein
+
+Create a table called `dinein` if not exits
 */
 
-DROP DATABASE IF EXISTS dinein;
-CREATE DATABASE dinein;
 USE dinein;
-
-/*
-Create User
-*/
-
-GRANT ALL PRIVILEGES ON dinein.* To 'dineindbuser'@'localhost' IDENTIFIED BY 'dineindbpassword';
 
 /*
 Create tables
