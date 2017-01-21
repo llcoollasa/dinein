@@ -20,39 +20,92 @@
 
                 {% include 'ag_alerts.html.twig' %}
 
+
+            <form>
+                <div class="form-group">
+
                 <div class="row">
+
+                    <!-- Customer -->
                     <div class="col-md-6">
-
-                        {{ form_start(form, {'method': 'POST'}) }}
-                            {{ form_errors(form) }}
-
                             <div class="box box-info">
                                 <div class="box-header">
-                                    <h3 class="box-title"></h3>
+                                    <h3 class="box-title">Customer</h3>
                                 </div><!-- /.box-header -->
                                 <div class="box-body">
-
-									<div class='form-group'>
-									    {{ form_label(form.reason_for_void) }}
-									    {{ form_widget(form.reason_for_void, { attr: { 'class': 'form-control' }}) }}
-									</div>
-
-                                                  
-
+                                    `Customer_Contact`, `Customer_Name`, `Customer_Delivery_address`, `Customer_email`
                                 </div><!-- /.box-body -->
-
-                                {{ form_rest(form) }}
-
-                                <div class="box-footer">
-                                    <button type="submit" class="btn btn-primary">Create</button>
-                                </div>
-
                             </div><!-- /.box -->
-                        {{ form_end(form) }}
+                    </div>
 
 
+                    <!-- Payment Details -->
+
+                    <div class="col-md-6">
+                        <div class="box box-info">
+                            <div class="box-header">
+                                <h3 class="box-title">Payment Details</h3>
+                            </div><!-- /.box-header -->
+                            <div class="box-body">
+                                `Payment_Id`, `Order_ID`, `Amount`, `Payment_Date`, `Customer_Contact`, `Payment_Type`
+                            </div><!-- /.box-body -->
+                        </div><!-- /.box -->
                     </div>
                 </div>
+
+                <!-- Items -->
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="box box-info">
+                            <div class="box-header">
+                                <h3 class="box-title">Product(s) List</h3>
+                            </div><!-- /.box-header -->
+                            <div class="box-body">
+                                `ItemIt_ID`, `Item_Description`, `Item_Category`, `Unit_Selling_Price`
+
+
+                                <div class="cart-content">
+                                    <div class="cart-header row">
+                                        <div class="col-md-5"><b>Item Description</b></div>
+                                        <div class="col-md-1"><b>Qty</b></div>
+                                        <div class="col-md-2"><b>Price</b></div>
+                                    </div>
+
+                                    <div class="cart-body row">
+                                        <div class="col-md-5">Double Cheese Burger</div>
+                                        <div class="col-md-1"><input type="number" name="item-name" class="form-control"></div>
+                                        <div class="col-md-2">Price</div>
+                                        <div class="col-md-1"><a class="btn btn-danger" href="#">Delete</a></div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-9">
+
+                                        </div>
+                                    </div>
+
+                                </div>
+
+
+
+                            </div><!-- /.box-body -->
+                        </div><!-- /.box -->
+                    </div>
+                </div>
+
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <a class="btn btn-primary" href="#">Add Product</a>
+                        <submit class="btn btn-success " href="/Order">Place An Order</submit>
+
+                    </div>
+
+
+                </div>
+                    </div>
+                </form>
+
 
             </section><!-- /.content -->
         </aside><!-- /.right-side -->

@@ -28,6 +28,30 @@
     </ul>
 </li>
 
+<li class="treeview {% if option is defined and (option == 'Raw_Material_Inventory_list' or option == 'Raw_Material_Inventory_create' or option == 'Raw_Material_Inventory_edit') %}active{% endif %}">
+    <a href="#">
+        <i class="fa fa-folder-o"></i>
+        <span>Raw Material Inventory</span>
+        <i class="fa pull-right fa-angle-right"></i>
+    </a>
+    <ul class="treeview-menu" style="display: none;">
+        <li {% if option is defined and option == 'Raw_Material_Inventory_list' %}class="active"{% endif %}><a href="{{ path('Raw_Material_Inventory_list') }}" style="margin-left: 10px;"><i class="fa fa-angle-double-right"></i> List</a></li>
+        <li {% if option is defined and option == 'Raw_Material_Inventory_create' %}class="active"{% endif %}><a href="{{ path('Raw_Material_Inventory_create') }}" style="margin-left: 10px;"><i class="fa fa-angle-double-right"></i> Create</a></li>
+    </ul>
+</li>
+
+<li class="treeview {% if option is defined and (option == 'Raw_Materials_For_Menu_Item_list' or option == 'Raw_Materials_For_Menu_Item_create' or option == 'Raw_Materials_For_Menu_Item_edit') %}active{% endif %}">
+    <a href="#">
+        <i class="fa fa-folder-o"></i>
+        <span>Raw Items in Menu Item</span>
+        <i class="fa pull-right fa-angle-right"></i>
+    </a>
+    <ul class="treeview-menu" style="display: none;">
+        <li {% if option is defined and option == 'Raw_Materials_For_Menu_Item_list' %}class="active"{% endif %}><a href="{{ path('Raw_Materials_For_Menu_Item_list') }}" style="margin-left: 10px;"><i class="fa fa-angle-double-right"></i> List</a></li>
+        <li {% if option is defined and option == 'Raw_Materials_For_Menu_Item_create' %}class="active"{% endif %}><a href="{{ path('Raw_Materials_For_Menu_Item_create') }}" style="margin-left: 10px;"><i class="fa fa-angle-double-right"></i> Create</a></li>
+    </ul>
+</li>
+
 <li class="treeview {% if option is defined and (option == 'Menu_Item_Inventory_list' or option == 'Menu_Item_Inventory_create' or option == 'Menu_Item_Inventory_edit') %}active{% endif %}">
     <a href="#">
         <i class="fa fa-folder-o"></i>
@@ -64,17 +88,6 @@
     </ul>
 </li>
 
-<li class="treeview {% if option is defined and (option == 'Raw_Material_Inventory_list' or option == 'Raw_Material_Inventory_create' or option == 'Raw_Material_Inventory_edit') %}active{% endif %}">
-    <a href="#">
-        <i class="fa fa-folder-o"></i>
-        <span>Raw Material Inventory</span>
-        <i class="fa pull-right fa-angle-right"></i>
-    </a>
-    <ul class="treeview-menu" style="display: none;">
-        <li {% if option is defined and option == 'Raw_Material_Inventory_list' %}class="active"{% endif %}><a href="{{ path('Raw_Material_Inventory_list') }}" style="margin-left: 10px;"><i class="fa fa-angle-double-right"></i> List</a></li>
-        <li {% if option is defined and option == 'Raw_Material_Inventory_create' %}class="active"{% endif %}><a href="{{ path('Raw_Material_Inventory_create') }}" style="margin-left: 10px;"><i class="fa fa-angle-double-right"></i> Create</a></li>
-    </ul>
-</li>
 
 <li class="treeview {% if option is defined and (option == 'Void_list' or option == 'Void_create' or option == 'Void_edit') %}active{% endif %}">
     <a href="#">

@@ -24,6 +24,8 @@ require_once __DIR__.'/Raw_Material_Inventory/index.php';
 require_once __DIR__.'/Void/index.php';
 require_once __DIR__.'/Void/index.php';
 require_once __DIR__.'/Reports/index.php';
+require_once __DIR__.'/Order/index.php';
+require_once __DIR__.'/Raw_Materials_For_Menu_Items/index.php';
 
 
 

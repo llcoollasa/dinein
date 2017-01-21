@@ -35,7 +35,7 @@ Issued_Qunatity double(8,2),
 Raw_Material_Type varchar(50)
 );
 
-create table Raw_Meterials_For_Menu_Item(
+create table Raw_Materials_For_Menu_Item(
 ItemIt_ID varchar(6) ,
 Raw_Material_ID int(10),
 Quantity double(8,2),

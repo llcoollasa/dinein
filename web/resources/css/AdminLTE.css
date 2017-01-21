@@ -1,6 +1,10 @@
-@import url(http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,300italic,400italic,600italic);
+/*@import url(http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,300italic,400italic,600italic);
 
-@import url(http://fonts.googleapis.com/css?family=Kaushan+Script);
+@import url(http://fonts.googleapis.com/css?family=Kaushan+Script);*/
+
+
+@import url("AdminLTE-source-sans.css");
+@import url("AdminLTE-kaushan.css");
 /*! 
  *   AdminLTE v1.0
  *   Author: AlmsaeedStudio.com
