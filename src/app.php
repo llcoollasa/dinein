@@ -40,7 +40,7 @@ $app->register(new Silex\Provider\DoctrineServiceProvider(), array(
 			'db' => array(
 				'driver'   => 'pdo_mysql',
 				'dbname'   => 'dinein',
-				'host'     => '127.0.0.1',
+				'host'     => '5.79.67.193',
 				'user'     => 'dineindbuser',
 				'password' => 'dineindbpassword',
 				'charset'  => 'utf8',
