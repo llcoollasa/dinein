@@ -1,5 +1,115 @@
 {% extends 'ag_base/backend.html.twig' %}
 
+{% block javascripts %}
+
+    {{ parent() }}
+    <script src="//cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.4/numeral.min.js"></script>
+    <!-- page script -->
+    <script type="text/javascript">
+
+
+        $(document).ready(function () {
+            $(".nav-tabs a").click(function () {
+                $(this).tab('show')[0];
+            });
+
+            $(".product").click(function () {
+                var itemId = $(this).find(".ItemIt_ID").html();
+                var itemDescription = $(this).find(".Item_Description").html();
+                var itemPrice = $(this).find(".Unit_Selling_Price").html();
+
+                $('.cart-body').append(addProduct(itemId, itemDescription, itemPrice));
+                updateTotal();
+            });
+
+            $("body").on("change" ,"input[name='item-quantity']",function () {
+
+                var qty = $(this)[0].value;
+                var parent = $(this).parent().parent()[0];
+
+                var subTotal =$(parent).find("[name='item-sub-total']").html();
+                var price = $(parent).find("[name='item-price']").html();
+
+                subTotal = price * qty;
+                subTotal = numeral(subTotal).format('0.00');
+
+                $(parent).first().find("[name='item-sub-total']").html(subTotal);
+
+                updateTotal();
+
+            });
+
+            $('.datepicker').datepicker();
+        });
+
+        function addProduct(itemId, itemDescription, itemPrice) {
+
+            var existingProducts = checkExistingProductInList(itemId);
+
+            var price=0;
+            var subTotal =0;
+            var qty =0;
+
+            if(existingProducts.length) {
+
+                price = Number($(existingProducts).find("[name='item-price']").html());
+                qty = Number($(existingProducts).find("[name='item-quantity']").attr('value')) + 1;
+                subTotal=price * qty;
+
+                $(existingProducts).remove();
+
+            }else {
+                price= itemPrice;
+                qty = 1;
+                subTotal=price * qty;
+            }
+
+            price = numeral(price).format('0.00');
+            subTotal = numeral(subTotal).format('0.00');
+
+            var element =
+                    '<div class="row" id="'+itemId+'">' +
+                    '<div class="col-md-5">'+itemDescription+'</div>' +
+                    '<div class="col-md-1">' +
+                        '<input type="number" name="item-quantity" class="form-control" value="'+qty+'">' +
+                        '<input type="hidden" name="item-id"  value="'+itemId+'"></div>' +
+                    '<div class="col-md-2" name="item-price">'+price+'</div>' +
+                    '<div class="col-md-2" name="item-sub-total">'+ subTotal +'</div>' +
+                    '<div class="col-md-2"><div class="btn btn-danger" onclick="deleteProduct(\''+itemId+'\')">Delete</div></div>' +
+                    '</div>';
+
+            return element;
+        }
+
+        function checkExistingProductInList(itemId){
+           if($(".row #"+itemId).length >0 ){
+               return $(".row #"+itemId);
+           }else{
+               return false;
+           }
+        }
+
+        function deleteProduct(itemId) {
+            $(".row #"+itemId).remove();
+            updateTotal();
+        }
+
+        function updateTotal() {
+
+            var subTotal =0 ;
+
+            $(".cart-body .row").each(function(x,product){
+                subTotal += Number($(product).find("[name='item-sub-total']").html());
+            });
+
+            subTotal = numeral(subTotal).format('0.00');
+            $('#cart-total').html(subTotal);
+        }
+
+
+    </script>
+{% endblock %}
+
 {% block container %}
 
     <div class="wrapper row-offcanvas row-offcanvas-left">
@@ -7,7 +117,7 @@
         {% include 'menu.html.twig' with {'option': 'Void_create'} %}
 
         <!-- Right side column. Contains the navbar and content of the page -->
-        <aside class="right-side">                
+        <aside class="right-side">
             <!-- Content Header (Page header) -->
             <section class="content-header">
                 <h1>
@@ -21,88 +131,193 @@
                 {% include 'ag_alerts.html.twig' %}
 
 
-            <form>
-                <div class="form-group">
+                <form>
+                    <div class="form-group">
 
-                <div class="row">
+                        <div class="row">
 
-                    <!-- Customer -->
-                    <div class="col-md-6">
-                            <div class="box box-info">
-                                <div class="box-header">
-                                    <h3 class="box-title">Customer</h3>
-                                </div><!-- /.box-header -->
-                                <div class="box-body">
-                                    `Customer_Contact`, `Customer_Name`, `Customer_Delivery_address`, `Customer_email`
-                                </div><!-- /.box-body -->
-                            </div><!-- /.box -->
-                    </div>
+                            <!-- Customer -->
+                            <div class="col-md-6">
+                                <div class="box box-info">
+                                    <div class="box-header">
+                                        <h3 class="box-title">Customer</h3>
+                                    </div><!-- /.box-header -->
+                                    <div class="box-body">
 
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <label>Contact Number</label>
+                                                <input type="text" class="form-control" name="Customer_Contact"/>
+                                            </div>
+                                        </div>
 
-                    <!-- Payment Details -->
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                            <label>Name</label>
+                                            <input type="text" class="form-control" name="Customer_Name"/></div>
+                                        </div>
 
-                    <div class="col-md-6">
-                        <div class="box box-info">
-                            <div class="box-header">
-                                <h3 class="box-title">Payment Details</h3>
-                            </div><!-- /.box-header -->
-                            <div class="box-body">
-                                `Payment_Id`, `Order_ID`, `Amount`, `Payment_Date`, `Customer_Contact`, `Payment_Type`
-                            </div><!-- /.box-body -->
-                        </div><!-- /.box -->
-                    </div>
-                </div>
-
-                <!-- Items -->
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="box box-info">
-                            <div class="box-header">
-                                <h3 class="box-title">Product(s) List</h3>
-                            </div><!-- /.box-header -->
-                            <div class="box-body">
-                                `ItemIt_ID`, `Item_Description`, `Item_Category`, `Unit_Selling_Price`
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <label>City</label>
+                                            <input type="text" class="form-control" name="Customer_Delivery_address"/>
+                                            </div>
+                                        </div>
 
 
-                                <div class="cart-content">
-                                    <div class="cart-header row">
-                                        <div class="col-md-5"><b>Item Description</b></div>
-                                        <div class="col-md-1"><b>Qty</b></div>
-                                        <div class="col-md-2"><b>Price</b></div>
-                                    </div>
+                                        <div class="row">
+                                            <div class="col-md-6"><label>Email</label>
+                                            <input type="text" class="form-control" name="Customer_email"/>
+                                            </div>
+                                        </div>
 
-                                    <div class="cart-body row">
-                                        <div class="col-md-5">Double Cheese Burger</div>
-                                        <div class="col-md-1"><input type="number" name="item-name" class="form-control"></div>
-                                        <div class="col-md-2">Price</div>
-                                        <div class="col-md-1"><a class="btn btn-danger" href="#">Delete</a></div>
-                                    </div>
+                                    </div><!-- /.box-body -->
+                                </div><!-- /.box -->
+                            </div>
 
-                                    <div class="row">
-                                        <div class="col-md-9">
+
+                            <!-- Payment Details -->
+
+                            <div class="col-md-6">
+                                <div class="box box-info">
+                                    <div class="box-header">
+                                        <h3 class="box-title">Payment Method</h3>
+                                    </div><!-- /.box-header -->
+                                    <div class="box-body">
+
+                                        <div class="row">
+                                            <div class="col-md-12">
+
+                                                    <div class="row">
+                                                        <div class="col-md-4 col-sm-offset-1">
+                                                            <input type="radio" class="form-control" name="Payment_Type"
+                                                                   value="CASH"/>
+                                                            <label>Cash</label>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="row">
+                                                        <div class="col-md-4 col-sm-offset-1">
+                                                            <input type="radio" class="form-control" name="Payment_Type"
+                                                                   value="CC"/>
+                                                            <label>Credit Card</label>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="row">
+                                                        <div class="col-md-4 col-sm-offset-1">
+                                                            <input type="radio" class="form-control" name="Payment_Type"
+                                                                   value="PAYPAL"/>
+                                                            <label>Paypal</label>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="row">
+                                                        <div class="col-md-4 col-sm-offset-1">
+                                                            <input type="radio" class="form-control" name="Payment_Type"
+                                                                   value="BANK"/>
+                                                            <label>Bank</label>
+                                                        </div>
+                                                    </div>
 
                                         </div>
-                                    </div>
+
+
+                                    </div><!-- /.box-body -->
+                                </div><!-- /.box -->
+                            </div>
+                        </div>
+
+                        <!-- Items -->
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="box box-info">
+                                    <div class="box-header">
+                                        <h3 class="box-title">Product(s) List</h3>
+                                    </div><!-- /.box-header -->
+                                    <div class="box-body">
+
+                                        <div class="cart-content">
+
+                                            <div class="cart-header row">
+                                                <div class="col-md-5"><b>Item Description</b></div>
+                                                <div class="col-md-1"><b>Qty</b></div>
+                                                <div class="col-md-2 fa-align-right"><b>Price</b></div>
+                                                <div class="col-md-2"><b>Total</b></div>
+                                                <div class="col-md-2"><b></b></div>
+                                            </div>
+
+                                            <hr/>
+
+                                            <div class="cart-body">
+                                            </div>
+
+                                            <hr/>
+
+                                            <div class="cart-footer row val">
+                                                <div class="col-md-5"></div>
+                                                <div class="col-md-1"></div>
+                                                <div class="col-md-2 fa-align-right">Total</div>
+                                                <div class="col-md-2" id="cart-total"></div>
+                                                <div class="col-md-2" ></div>
+                                            </div>
+
+                                        </div>
+                                    </div><!-- /.box-body -->
+                                </div><!-- /.box -->
+                            </div>
+                        </div>
+
+                        <!-- product List -->
+                        <div class="row">
+                            <div class="col-md-12">
+
+                                <ul class="nav nav-tabs">
+
+                                    {% for key, cat in data.ItemIt_ID %}
+                                        <li class="{% if loop.index==1 %}active{% endif %}">
+                                            <a href="#{{ key }}" data-toggle="tab">{{ key }}</a>
+                                        </li>
+                                    {% endfor %}
+
+                                </ul>
+
+
+                                <div id="tab-content" class="tab-content ">
+
+                                    {% for k, category in data.ItemIt_ID %}
+                                        <div id="{{ k }}" class="tab-pane   {% if loop.index==1 %}active{% endif %}">
+                                            {% for items in category %}
+
+                                                <div class="col-sm-2 navbar-left">
+                                                    <div class="btn glyphicon glyphicon-shopping-cart product">
+                                                        <div class="ItemIt_ID">{{ items['ItemIt_ID'] }}</div>
+                                                        <div class="Item_Description">{{ items['Item_Description'] }}</div>
+                                                        <div class="Unit_Selling_Price">{{ items['Unit_Selling_Price'] }}</div>
+                                                    </div>
+
+                                                </div>
+
+
+                                            {% endfor %}
+                                        </div>
+                                    {% endfor %}
 
                                 </div>
 
+                            </div>
+
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <a class="btn btn-primary" href="#">Add Product</a>
+                                <submit class="btn btn-success " href="/Order">Place An Order</submit>
+
+                            </div>
 
 
-                            </div><!-- /.box-body -->
-                        </div><!-- /.box -->
-                    </div>
-                </div>
-
-
-                <div class="row">
-                    <div class="col-md-12">
-                        <a class="btn btn-primary" href="#">Add Product</a>
-                        <submit class="btn btn-success " href="/Order">Place An Order</submit>
-
-                    </div>
-
-
-                </div>
+                        </div>
                     </div>
                 </form>
 
