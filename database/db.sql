@@ -249,7 +249,54 @@ VALUES
 ('Vanilla Ice Cream', '2000', 'ICE CREAM', '35', '100', 'LITER'),
 ('Strawberry Ice Cream', '2000', 'ICE CREAM', '35', '100', 'LITER'),
 ('Water Bottle Small', '2000', 'BEVERAGE', '40', '100', 'LITER'),
-('Water Bottle Large', '2000', 'BEVERAGE', '65', '100', 'LITER')
+('Water Bottle Large', '2000', 'BEVERAGE', '65', '100', 'LITER');
 
+INSERT INTO `raw_material_inventory`
+(`Raw_Material_ID`, `Description`, `Reorder_level`, `Product_category`, `Unit_Buying_Price`, `Issued_Qunatity`, `Raw_Material_Type`)
+VALUES
+(36, 'Flour', 500.00, 'Flour', 100.00, 100.00, 'KG'),
+(37, 'Processed cheese', 500.00, 'DAIRY', 800.00, 100.00, 'KG'),
+(38, 'Lettuce leaf', 100.00, 'VEGETABLE', 200.00, 100.00, 'KG');
 
-
+INSERT INTO `Raw_Materials_For_Menu_Item`
+(`ItemIt_ID`, `Raw_Material_ID`, `Quantity`)
+VALUES
+('BEV500', '24', '0.5'),
+('BEV501', '24', '1.5'),
+('BEV502', '24', '2'),
+('BEV503', '25', '0.5'),
+('BEV504', '25', '1.5'),
+('BEV505', '25', '2'),
+('BEV506', '26', '0.5'),
+('BEV507', '26', '1.5'),
+('BEV508', '26', '2'),
+('BEV509', '27', '0.5'),
+('BEV510', '27', '1.5'),
+('BEV511', '27', '2'),
+('BEV512', '34', '1'),
+('BEV513', '35', '1'),
+('BRF100', '15', '0.05'),
+('BRF100', '20', '0.02'),
+('BRF100', '1', '1'),
+('BRF100', '4', '0.03'),
+('BRF100', '23', '0.01'),
+('BRF100', '9', '0.01'),
+('BRF100', '36', '0.10'),
+('BRF101', '23', '0.01'),
+('BRF101', '9', '0.01'),
+('BRF101', '1', '1'),
+('BRF101', '5', '1'),
+('BRF101', '12', '0.03'),
+('BRF101', '19', '0.03'),
+('BRF101', '37', '0.05'),
+('BRF101', '4', '0.03'),
+('BRF102', '5', '1'),
+('BRF102', '19', '0.08'),
+('BRF102', '20', '0.03'),
+('BRF102', '4', '0.03'),
+('BRF102', '1', '1'),
+('BRF102', '38', '0.05'),
+('BRF103', '5', '1'),
+('BRF103', '23', '0.01'),
+('BRF103', '9', '0.01'),
+('BRF103', '20', '0.10');
