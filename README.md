@@ -54,7 +54,7 @@ import the sql file from /path_to/dinein/database/dinein.sql into mysql server u
 
 Method 1
 
-    Open up mysql workbench. open the above db.sql file and execute all the sql statements
+    Open up mysql workbench.Create database called `dinein` inside mysql. open the above db.sql file and execute all the sql statements
 
 Method 2
 
