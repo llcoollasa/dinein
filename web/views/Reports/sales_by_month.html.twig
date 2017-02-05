@@ -1,0 +1,140 @@
+{% extends 'ag_base/backend.html.twig' %}
+
+
+{% block javascripts %}
+    {{ parent() }}
+
+
+    <script type="text/javascript">
+
+
+        $(document).ready(function () {
+
+            for (i = new Date().getFullYear(); i > 1900; i--)
+            {
+                $('#datetime_from').append($('<option />').val(i).html(i));
+                $('#datetime_to').append($('<option />').val(i).html(i));
+            }
+
+            $("#datetime_from").val('{{ from }}');
+
+        });
+
+    </script>
+
+
+{% endblock %}
+
+{% block container %}
+
+
+
+
+
+    <div class="wrapper row-offcanvas row-offcanvas-left">
+
+        {% include 'menu.html.twig' with {'option': 'Reports_CustomerByDeliveryLocation'} %}
+
+        <!-- Right side column. Contains the navbar and content of the page -->
+        <aside class="right-side">
+            <!-- Content Header (Page header) -->
+            <section class="content-header">
+                <h1>
+                    Sales By Month
+                </h1>
+            </section>
+
+            <!-- Main content -->
+            <section class="content">
+
+
+
+                <div class="row">
+                    <div class="col-xs-12">
+
+                        {% include 'ag_alerts.html.twig' %}
+
+                        <div class="box">
+                            <div class="box-header">
+
+                            </div><!-- /.box-header -->
+
+                            <div class="box-body table-responsive">
+
+                                <form name ="params" method="get" >
+                                    <div class="row">
+                                        <div class="col-lg-1"><label>Year To </label>
+                                            <select name="datetime_from" id="datetime_from" value="{{ from }}"></select>
+                                        </div>
+                                        <div class="col-lg-1"><label>Year To </label>
+                                            <select name="datetime_to" id="datetime_to" value="{{ to }}"></select>
+                                        </div>
+                                        <div class="col-lg-8"><label>Months </label>
+
+                                            <input type="checkbox" id="chk_1" value="1" name="month[]"><span>January</span>
+                                            <input type="checkbox" id="chk_2"  value="2" name="month[]"><span>February</span>
+                                            <input type="checkbox" id="chk_3"  value="3" name="month[]"><span>March</span>
+                                            <input type="checkbox" id="chk_4"  value="4" name="month[]"><span>April</span>
+                                            <input type="checkbox" id="chk_5"  value="5" name="month[]"><span>May</span>
+                                            <input type="checkbox" id="chk_6"  value="6" name="month[]"><span>June</span>
+                                            <input type="checkbox" id="chk_7"  value="7" name="month[]"><span>July</span>
+                                            <input type="checkbox" id="chk_8"  value="8" name="month[]"><span>August</span>
+                                            <input type="checkbox" id="chk_9"  value="9" name="month[]"><span>September</span>
+                                            <input type="checkbox" id="chk_10"  value="10" name="month[]"><span>October</span>
+                                            <input type="checkbox" id="chk_11"  value="11" name="month[]"><span>November</span>
+                                            <input type="checkbox" id="chk_12"  value="12" name="month[]"><span>December</span>
+                                        </div>
+                                        <div class="col-lg-2"><input type="submit"></div>
+                                    </div>
+
+
+
+                                </form>
+
+
+
+
+                                <div class="box-body table-responsive">
+
+                                    <div>
+                                        {% include 'Reports/export_to_excel.html.twig' %}
+                                    </div>
+
+                                    <table id="report" class="table table-bordered table-striped">
+
+                                        <thead>
+                                            <tr>
+                                                {% for column in columns %}
+                                                    <th>{{ column }}</th>
+                                                {% endfor %}
+                                            </tr>
+                                        </thead>
+
+                                        <tbody>
+
+                                                {% for table_column in report %}
+                                                <tr>
+                                                    {% for col in table_column %}
+                                                        <td>{{ col }}</td>
+                                                    {% endfor %}
+                                                </tr>
+                                                {% endfor %}
+
+                                        </tbody>
+                                    </table>
+
+
+                                </div><!-- /.box-body -->
+
+
+
+                            </div><!-- /.box-body -->
+                        </div><!-- /.box -->
+                    </div>
+                </div>
+
+            </section><!-- /.content -->
+        </aside><!-- /.right-side -->
+    </div><!-- ./wrapper -->
+
+{% endblock %}
