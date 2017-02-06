@@ -78,13 +78,18 @@
                 subTotal=price * qty;
             }
 
+            var priceBeforeFormat = price;
+            var subTotalBeforeFormat = subTotal;
             price = numeral(price).format('0.00');
             subTotal = numeral(subTotal).format('0.00');
+
+            var inputValue = "itemQty="+qty+"_itemPrice="+priceBeforeFormat+"_itemSubTotal="+subTotalBeforeFormat;
 
             var element =
                     '<div class="row" id="'+itemId+'">' +
                     '<div class="col-md-5">'+itemDescription+'</div>' +
                     '<div class="col-md-1">' +
+                        '<input type="hidden" name="item_id['+itemId+']" value="'+inputValue+'"/>' +
                         '<input type="number" name="item-quantity" class="form-control" value="'+qty+'">' +
                         '<input type="hidden" name="item-id"  value="'+itemId+'"></div>' +
                     '<div class="col-md-2" name="item-price">'+price+'</div>' +
@@ -146,7 +151,7 @@
                 {% include 'ag_alerts.html.twig' %}
 
 
-                <form>
+                <form method="post" action="Order/place">
                     <div class="form-group">
 
                         <div class="row">
@@ -329,14 +334,15 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <a id="opener" class="btn btn-primary" href="#">Add Product</a>
-                                <submit class="btn btn-success " href="/Order">Place An Order</submit>
+                                <button type="submit" class="btn btn-success ">Place An Order</button>
 
                             </div>
 
 
                         </div>
                     </div>
-                </form>
+                </div>
+            </form>
 
 
             </section><!-- /.content -->
