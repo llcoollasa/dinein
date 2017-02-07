@@ -31,10 +31,13 @@
                 var price = $(parent).find("[name='item-price']").html();
 
                 subTotal = price * qty;
+                var subTotalBeforeFormat = subTotal;
                 subTotal = numeral(subTotal).format('0.00');
 
                 $(parent).first().find("[name='item-sub-total']").html(subTotal);
 
+                //update the hidden field 
+                $(parent).find("input[type='hidden']").val("itemQty="+qty+"_itemPrice="+price+"_itemSubTotal="+subTotalBeforeFormat);
                 updateTotal();
 
             });
