@@ -19,6 +19,9 @@ use Doctrine\DBAL\Schema\Table;
 
 $console = new Application('CRUD Admin Generator command instalation', '1.0');
 
+const CSV_PATH = "/var/www/html/crud_admin_gen/extr/csv/";
+
+
 $console
     ->register('generate:admin')
     ->setDefinition(array())
@@ -411,5 +414,212 @@ $console->register('db:migrate')
 
 
     });
+
+$console->register('db:populate')
+    ->setDefinition(array())
+    ->setDescription("Dump Data")
+    ->setCode(function (InputInterface $input, OutputInterface $output) use ($app) {
+
+        prepareDataset($app);
+
+        fwrite(STDOUT,"\nFinished");
+
+    });
+
+
+function uploadData($dataSet, $fromDate, $toDate, $app){
+
+    $customers = array('0112144141',
+        '0112154365',
+        '0112154623',
+        '0112171745',
+        '0112251232',
+        '0112262566',
+        '0112457458',
+        '0112565682',
+        '0112585456',
+        '0112655946',
+        '0112665588',
+        '0112784536',
+        '0112956862',
+        '0112998877',
+        '0171263235',
+        '0171745124',
+        '0712456985',
+        '0714582343',
+        '0714585212',
+        '0717458565',
+        '0775184362',
+        '0775222222',
+        '0775333355',
+        '0775445544',
+        '0775515975',
+        '0775555555',
+        '0775656856',
+        '0775666566',
+        '0775736563',
+        '0775741254',
+        '0775745856',
+        '0775778844',
+        '0775846455',
+        '0775852526',
+        '0775884455',
+        '0775919191',
+        '0775984578',
+        '0775985696',
+        '0776458434',
+        '0776895321',
+        '0784112211',
+        '0784343645',
+        '0784741125',
+        '0784788554',
+        '0784789456',
+        '0784845757',
+        '0784854565',
+        '0784956236',
+        '0784985413',
+        '0784985656'
+    );
+    $orderType = array('DINEIN','TAKEAWAY','DELIVERY');
+    $orderPaymentType = array('CASH','CC','PAYPAL','BANK');
+    $orderFeedback = array('VERY GOOD', 'GOOD', 'OK', 'BAD', 'VERY BAD');
+    $voidReasons = array("Food Too Cold", "Not Tasty", "Unsatisfied Service", "Time taken for my Order too much", "Overpriced", "Quantity Not Reasonable");
+    $total_orders = 0;
+
+
+    foreach($dataSet as $key=>$value){
+        $total_orders += $value[0];
+    }
+
+    $monthly_orders_per_customer = $total_orders / count($customers);
+    $avg_daily_orders= floor($monthly_orders_per_customer /30);
+
+    $totalOrders = $total_orders;
+    $done = 0;
+
+    while($total_orders){
+
+        foreach($customers as $customer){
+
+            $total_amount = 0;
+
+            $int= mt_rand(strtotime($fromDate),strtotime($toDate));
+            $currentDate = date("Y-m-d",$int);
+
+
+            $sql_purchase_order = "INSERT INTO  `Purchase_Order`
+                                (`Order_Date`, `Order_Delivery_date`, `order_type`)
+                                VALUES ('$currentDate', '$currentDate','". $orderType[array_rand($orderType)]."')";
+
+            $app['db']->executeUpdate($sql_purchase_order);
+
+            $orderId = $app['db']->lastInsertId();
+
+            $items = array_rand($dataSet, $avg_daily_orders);
+
+            foreach($items as $item)
+            {
+                $current_qty = $dataSet[$item][0];
+                $selected_qty =0;
+
+                if($current_qty){
+
+                    $qty = rand(1,10);
+
+                    if($current_qty>0 && $qty<=$current_qty){
+                        $selected_qty = $qty;
+                    }else{
+                        $selected_qty = $current_qty;
+                    }
+
+                    $dataSet[$item][0] -= $selected_qty;
+                    $total_orders -= $selected_qty;
+
+                    $total_amount += $selected_qty * $dataSet[$item][1];
+
+                    $sql_purchase_order_item = "INSERT INTO  `Purchase_Order_Item`
+                                (`Order_ID`, `ItemIt_ID`, `Quantity`)
+                                VALUES ($orderId, '$item','$selected_qty')";
+
+                    $app['db']->executeUpdate($sql_purchase_order_item);
+                    $done +=$selected_qty;
+                }
+            }
+
+            $sql_purchase_order_payment = "INSERT INTO  `Purchase_Order_Payment`
+                                (`Order_ID`, `Amount`, `Customer_Contact`, `Payment_Type`, `Payment_Date`)
+                                VALUES ($orderId, '$total_amount','$customer','". $orderPaymentType[array_rand($orderPaymentType)]."','$currentDate')";
+            $app['db']->executeUpdate($sql_purchase_order_payment);
+
+
+
+            //Feedback
+            $feedBack = $orderFeedback[array_rand($orderFeedback)];
+
+            $sql_customer_feedback = "INSERT INTO  `Customer_Feedback`
+                                (`Order_ID`, `feedbck`)
+                                VALUES ($orderId,'$feedBack')";
+
+            $app['db']->executeUpdate($sql_customer_feedback);
+
+
+            //Void reason
+            if($feedBack == "BAD" || $feedBack == "VERY BAD" ){
+                $sql_customer_feedback = "INSERT INTO  `Void`
+                                (`Order_ID`, `reason_for_void`)
+                                VALUES ($orderId,'".$voidReasons[array_rand($voidReasons)]."')";
+
+                $app['db']->executeUpdate($sql_customer_feedback);
+            }
+
+            progressBar($done, $totalOrders);
+
+        }
+
+    }
+}
+
+function prepareDataset($app){
+
+    $csvFiles = array_diff(scandir(CSV_PATH), array('..', '.'));
+
+    foreach($csvFiles as $csvFile){
+
+        $fullCsvPath = CSV_PATH.$csvFile;
+        $fromDate = str_replace(".csv",'',str_replace("_",'-',$csvFile));
+        $endDate =  date("Y-m-t", strtotime($fromDate));
+
+        fwrite(STDOUT,"\n$csvFile");
+
+        if( file_exists($fullCsvPath) ){
+
+            $file = fopen($fullCsvPath,"r");
+            $dataSet = array();
+
+            while(! feof($file))
+            {
+                $row = fgetcsv($file);
+                $dataSet[$row[0]] =  array((int)$row[2],(int)$row[1]) ;
+            }
+
+            uploadData($dataSet, $fromDate, $endDate, $app);
+
+            $dataSet = null;
+            fclose($file);
+        }
+
+    }
+
+}
+
+function progressBar($done, $total) {
+    $perc = floor(($done / $total) * 100);
+    $left = 100 - $perc;
+    $write = sprintf("\033[0G\033[2K[%'={$perc}s>%-{$left}s] - $perc%% - $done/$total", "", "");
+    fwrite(STDERR, $write);
+}
+
+
+
 
 return $console;

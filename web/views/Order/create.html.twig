@@ -3,7 +3,7 @@
 {% block javascripts %}
 
     {{ parent() }}
-    <script src="//cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.4/numeral.min.js"></script>
+     <script src="{{ app.asset_path }}/js/numeral.min.js" type="text/javascript"></script>
     <!-- page script -->
     <script type="text/javascript">
 
@@ -31,15 +31,32 @@
                 var price = $(parent).find("[name='item-price']").html();
 
                 subTotal = price * qty;
+                var subTotalBeforeFormat = subTotal;
                 subTotal = numeral(subTotal).format('0.00');
 
                 $(parent).first().find("[name='item-sub-total']").html(subTotal);
 
+                //update the hidden field 
+                $(parent).find("input[type='hidden']").val("itemQty="+qty+"_itemPrice="+price+"_itemSubTotal="+subTotalBeforeFormat);
                 updateTotal();
 
             });
 
-            $('.datepicker').datepicker();
+
+            //show Products
+            $( "#dialog" ).dialog({
+                autoOpen: false,
+                width: "90%",
+                maxWidth: "768px",
+                title : 'Select Item'
+            });
+
+            $( "#opener" ).on( "click", function() {
+                $( "#dialog" ).dialog( "open" );
+            });
+
+
+
         });
 
         function addProduct(itemId, itemDescription, itemPrice) {
@@ -64,13 +81,18 @@
                 subTotal=price * qty;
             }
 
+            var priceBeforeFormat = price;
+            var subTotalBeforeFormat = subTotal;
             price = numeral(price).format('0.00');
             subTotal = numeral(subTotal).format('0.00');
+
+            var inputValue = "itemQty="+qty+"_itemPrice="+priceBeforeFormat+"_itemSubTotal="+subTotalBeforeFormat;
 
             var element =
                     '<div class="row" id="'+itemId+'">' +
                     '<div class="col-md-5">'+itemDescription+'</div>' +
                     '<div class="col-md-1">' +
+                        '<input type="hidden" name="item_id['+itemId+']" value="'+inputValue+'"/>' +
                         '<input type="number" name="item-quantity" class="form-control" value="'+qty+'">' +
                         '<input type="hidden" name="item-id"  value="'+itemId+'"></div>' +
                     '<div class="col-md-2" name="item-price">'+price+'</div>' +
@@ -112,6 +134,7 @@
 
 {% block container %}
 
+
     <div class="wrapper row-offcanvas row-offcanvas-left">
 
         {% include 'menu.html.twig' with {'option': 'Void_create'} %}
@@ -121,7 +144,7 @@
             <!-- Content Header (Page header) -->
             <section class="content-header">
                 <h1>
-                    Create Void
+                    Order Placement
                 </h1>
             </section>
 
@@ -131,7 +154,7 @@
                 {% include 'ag_alerts.html.twig' %}
 
 
-                <form>
+                <form method="post" action="Order/place">
                     <div class="form-group">
 
                         <div class="row">
@@ -269,7 +292,8 @@
                         </div>
 
                         <!-- product List -->
-                        <div class="row">
+
+                        <div class="row" id="dialog" >
                             <div class="col-md-12">
 
                                 <ul class="nav nav-tabs">
@@ -290,7 +314,7 @@
                                             {% for items in category %}
 
                                                 <div class="col-sm-2 navbar-left">
-                                                    <div class="btn glyphicon glyphicon-shopping-cart product">
+                                                    <div class="product" style="border: 2px solid rgba(96, 106, 79, 0.31); margin: 2px; background-color: rgba(215, 225, 158, 0.15); cursor: pointer">
                                                         <div class="ItemIt_ID">{{ items['ItemIt_ID'] }}</div>
                                                         <div class="Item_Description">{{ items['Item_Description'] }}</div>
                                                         <div class="Unit_Selling_Price">{{ items['Unit_Selling_Price'] }}</div>
@@ -309,17 +333,19 @@
 
                         </div>
 
+
                         <div class="row">
                             <div class="col-md-12">
-                                <a class="btn btn-primary" href="#">Add Product</a>
-                                <submit class="btn btn-success " href="/Order">Place An Order</submit>
+                                <a id="opener" class="btn btn-primary" href="#">Add Product</a>
+                                <button type="submit" class="btn btn-success ">Place An Order</button>
 
                             </div>
 
 
                         </div>
                     </div>
-                </form>
+                </div>
+            </form>
 
 
             </section><!-- /.content -->

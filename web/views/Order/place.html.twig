@@ -1,0 +1,82 @@
+{% extends 'ag_base/backend.html.twig' %}
+
+{% block container %}
+
+
+    <div class="wrapper row-offcanvas row-offcanvas-left">
+
+        {% include 'menu.html.twig' with {'option': 'Void_create'} %}
+
+        <!-- Right side column. Contains the navbar and content of the page -->
+        <aside class="right-side">
+            <!-- Content Header (Page header) -->
+            <section class="content-header">
+                <h1>
+                    Your Order {{ orderId }} has successfully Placed
+                </h1>
+            </section>
+
+            <!-- Main content -->
+            <section class="content">
+
+
+                <div class="row">
+                    <div class="col-xs-12">
+
+                        <div class="box">
+
+                            <div class="box-body table-responsive">
+
+                                <div class="box-header">
+                                    <div><h4>Customer Details:</h4></div>
+                                    <div><strong>Customer Contact :</strong> {{ data['Customer_Contact'] }} </div>
+                                    <div><strong>Customer_Name:</strong> {{ data['Customer_Name'] }} </div>
+                                    <div><strong>Customer_Delivery_address:</strong> {{ data['Customer_Delivery_address'] }} </div>
+                                    <div><strong>Customer_email:</strong> {{ data['Customer_email'] }} </div>
+
+                                </div>
+
+                                <div class="box-header">
+                                    <div><h4>Payment Info:</h4></div>
+                                    <div><strong>Payment Type by:</strong> {{ data['Payment_Type'] }} </div>
+                                    <div><strong>Sum Of:</strong> {{ total|number_format(2, '.', ',') }} </div>
+
+                                </div>
+
+                                <table id="Purchase_Order_list" class="table table-bordered table-striped">
+                                    <thead>
+                                    <tr>
+                                        <th>Item</th>
+                                        <th>Description</th>
+                                        <th>Price</th>
+                                        <th>Quantity</th>
+                                        <th>Total</th>
+                                    </tr>
+                                    </thead>
+                                    <tfoot>
+
+                                    {% for key, item in basket %}
+                                    <tr>
+                                        <td>{{ key }}</td>
+                                        <td>Description</td>
+                                        <td>{{ item['itemPrice']|number_format(2, '.', ',') }}</td>
+                                        <td>{{ item['itemQty'] }}</td>
+                                        <td>{{ item['itemSubTotal']|number_format(2, '.', ',') }}</td>
+                                    </tr>
+                                    {% endfor %}
+
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </div>
+                        <a class="btn btn-primary" href="{{ path('Order') }}">Create New Order</a><br /><br />
+
+                    </div>
+
+                </div>
+
+            </section><!-- /.content -->
+        </aside><!-- /.right-side -->
+    </div><!-- ./wrapper -->
+
+{% endblock %}

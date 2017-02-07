@@ -34,7 +34,44 @@
 
                                 <div class="box-body table-responsive">
 
-                                    <a class="btn btn-primary" href="{{ path('Reports_CustomerByDeliveryLocation') }}">Customer By Delivery Location</a>
+                                    <div><h3>Customer</h3></div>
+                                    <div class="row">
+                                        <div class="col-lg-6">
+                                            <a class="btn btn-primary" href="{{ path('Reports_CustomerByDeliveryLocation') }}">Customer By Delivery Location</a>
+                                            <a class="btn btn-primary" href="{{ path('Reports_Customers') }}">Customers</a>
+                                            <a class="btn btn-primary" href="{{ path('Reports_CustomersFeedback') }}">Feedback</a>
+                                            <a class="btn btn-primary" href="{{ path('Reports_Void') }}">Void</a>
+                                        </div>
+                                    </div>
+
+                                    <div><h3>Sales</h3></div>
+                                    <div class="row">
+                                        <div class="col-lg-6">
+                                            <a class="btn btn-primary" href="{{ path('Reports_DailySalesReport') }}">Daily Sales Report</a>
+                                            <a class="btn btn-primary" href="{{ path('Reports_SalesByMonth') }}">Monthly Sales</a>
+                                            <a class="btn btn-primary" href="{{ path('Reports_YearlySalesByMonth') }}">Yearly Sales by Month</a>
+                                        </div>
+                                    </div>
+
+
+                                    <div><h3>Menu Items</h3></div>
+                                    <div class="row">
+                                        <div class="col-lg-6">
+                                            <a class="btn btn-primary" href="{{ path('Reports_MenuItems') }}">Menu Item</a>
+                                            <a class="btn btn-primary" href="{{ path('Reports_BestSellingProduct') }}">Best Selling Product</a>
+                                        </div>
+                                    </div>
+
+
+                                    <div><h3>Raw Items</h3></div>
+                                    <div class="row">
+                                        <div class="col-lg-6">
+                                            <a class="btn btn-primary" href="{{ path('Reports_RawItems') }}">Raw Items</a>
+                                            <a class="btn btn-primary" href="{{ path('Reports_FastMovingRawItems') }}">Fast Moving Raw Items</a>
+                                        </div>
+                                    </div>
+
+
 
                                 </div><!-- /.box-body -->
 
